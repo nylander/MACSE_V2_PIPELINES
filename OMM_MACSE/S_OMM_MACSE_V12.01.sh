@@ -12,11 +12,47 @@ DATE=$(date)
 
 printf "\n\n" # separate script message from the rest
 
+
+function show_help () {
+cat <<HEREDOC
+Usage example:
+
+  $SCRIPT_NAME \
+    --in_seq_file seq_file.fasta \
+    --out_dir out_dir \
+    --out_file_prefix PREFIX \
+    [--genetic_code_number code_number] \
+    [--alignAA_soft [MAFFT/MUSCLE/PRANK]] \
+    [--aligner_extra_option \"--localpair --maxiterate 1000\"] \
+    [--min_percent_NT_at_ends 0.7] \
+    [--out_detail_dir SAVE_DETAILS/] \
+    [--in_seq_lr_file less_reliable_seq_file.fasta] \
+    [--java_mem 500m] \
+    [--MACSE_min_MEM_length 6] \
+    [--no_prefiltering] \
+    [--no_FS_detection] \
+    [--no_filtering] \
+    [--no_postfiltering] \
+    [--min_seqToKeepSite] \
+    [--replace_FS_by_gaps] \
+    [--save_details] \
+    [--debug]
+
+For further details please check the documentation on MACSE website:
+https://bioweb.supagro.inra.fr/macse
+
+HEREDOC
+}
+
 function quit_pb_option() {
-  echo -e "\n\nThis script aligns sequences using:\n1) MACSE pre-filtering,\n2) MACSE alignment to find frameshifts,\n3) MAFFT for aligning the resulting AA sequences, and\n4) HMMcleaner for cleaning resulting alignments.\n"
+  echo -e "\n\nThis script aligns sequences using:\n1) MACSE pre-filtering,"
+  echo -e "2) MACSE alignment to find frameshifts,"
+  echo -e "3) MAFFT for aligning the resulting AA sequences, and"
+  echo -e "4) HMMcleaner for cleaning resulting alignments.\n"
   echo -e "\nYour command line is incorrect, please check your options."
-  echo -e "\n Usage example:\n$SCRIPT_NAME --out_dir out_dir --out_file_prefix PREFIX --in_seq_file seq_file.fasta [--genetic_code_number code_number] [--alignAA_soft MAFFT/MUSCLE/PRANK] ][--aligner_extra_option \"--localpair --maxiterate 1000\"] [--min_percent_NT_at_ends 0.7] [--out_detail_dir SAVE_DETAILS/] [--in_seq_lr_file less_reliable_seq_file.fasta] [--java_mem 500m] [--MACSE_min_MEM_length 6] [--no_prefiltering] [--no_FS_detection] [--no_filtering] [--no_postfiltering] [--min_seqToKeepSite] [--replace_FS_by_gaps] [--save_details] [--debug]\n"
-  echo -e "\n\nFor further details please check the documentation on MACSE website: https://bioweb.supagro.inra.fr/macse\n\n"
+  #echo -e "\n Usage example:\n$SCRIPT_NAME --out_dir out_dir --out_file_prefix PREFIX --in_seq_file seq_file.fasta [--genetic_code_number code_number] [--alignAA_soft MAFFT/MUSCLE/PRANK] ][--aligner_extra_option \"--localpair --maxiterate 1000\"] [--min_percent_NT_at_ends 0.7] [--out_detail_dir SAVE_DETAILS/] [--in_seq_lr_file less_reliable_seq_file.fasta] [--java_mem 500m] [--MACSE_min_MEM_length 6] [--no_prefiltering] [--no_FS_detection] [--no_filtering] [--no_postfiltering] [--min_seqToKeepSite] [--replace_FS_by_gaps] [--save_details] [--debug]\n"
+  show_help
+  #echo -e "\n\nFor further details please check the documentation on MACSE website: https://bioweb.supagro.inra.fr/macse\n\n"
   exit 1
 }
 
@@ -48,6 +84,8 @@ MIN_MEM_OPT=""
 
 while (( $# > 0 )); do
   case "$1" in
+    --help)                   show_help; exit 0 ;;
+    -h)                       show_help; exit 0 ;;
     --in_seq_file)            IN_SEQ_FILE=$(get_in_file_param "$1" "$2")     || quit_pb_option ; shift 2;;
     --in_seq_lr_file)         IN_SEQ_LR_FILE=$(get_in_file_param "$1" "$2")  || quit_pb_option ; HAS_SEQ_LR=1; SEQ_LR_OPT="-seq_lr $IN_SEQ_LR_FILE"; shift 2;;
     --MACSE_min_MEM_length)   min_MEM=$(get_in_int_param "$1" "$2")          || quit_pb_option ; MIN_MEM_OPT=" -min_MEM_length $min_MEM"; shift 2;;
