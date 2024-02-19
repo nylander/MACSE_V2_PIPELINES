@@ -12,11 +12,18 @@ DATE=$(date)
 
 printf "\n\n" # separate script message from the rest
 
-
 function show_help () {
 cat <<HEREDOC
+OMM_MACSE
 
-OMM_MACSE usage example:
+This script aligns sequences using:
+
+1) MACSE pre-filtering,
+2) MACSE alignment to find frameshifts,
+3) MAFFT for aligning the resulting AA sequences, and
+4) HMMcleaner for cleaning resulting alignments.
+
+Usage example:
 
   $SCRIPT_NAME
     --in_seq_file seq_file.fasta
@@ -46,14 +53,8 @@ HEREDOC
 }
 
 function quit_pb_option() {
-  echo -e "\n\nThis script aligns sequences using:\n1) MACSE pre-filtering,"
-  echo -e "2) MACSE alignment to find frameshifts,"
-  echo -e "3) MAFFT for aligning the resulting AA sequences, and"
-  echo -e "4) HMMcleaner for cleaning resulting alignments.\n"
-  echo -e "\nYour command line is incorrect, please check your options."
-  #echo -e "\n Usage example:\n$SCRIPT_NAME --out_dir out_dir --out_file_prefix PREFIX --in_seq_file seq_file.fasta [--genetic_code_number code_number] [--alignAA_soft MAFFT/MUSCLE/PRANK] ][--aligner_extra_option \"--localpair --maxiterate 1000\"] [--min_percent_NT_at_ends 0.7] [--out_detail_dir SAVE_DETAILS/] [--in_seq_lr_file less_reliable_seq_file.fasta] [--java_mem 500m] [--MACSE_min_MEM_length 6] [--no_prefiltering] [--no_FS_detection] [--no_filtering] [--no_postfiltering] [--min_seqToKeepSite] [--replace_FS_by_gaps] [--save_details] [--debug]\n"
+  echo -e "\nERROR: Your command line is incorrect, please check your options."
   show_help
-  #echo -e "\n\nFor further details please check the documentation on MACSE website: https://bioweb.supagro.inra.fr/macse\n\n"
   exit 1
 }
 
@@ -83,10 +84,15 @@ MIN_SEQ_TO_KEEP_SITE=0
 REPLACE_FS_GAP=0
 MIN_MEM_OPT=""
 
+if [ "$#" == "0" ]; then
+  show_help
+  exit 1
+fi
+
 while (( $# > 0 )); do
   case "$1" in
-    --help)                   show_help; exit 0 ;;
-    -h)                       show_help; exit 0 ;;
+    --help)                   show_help; exit 0; shift ;;
+    -h)                       show_help; exit 0; shift ;;
     --in_seq_file)            IN_SEQ_FILE=$(get_in_file_param "$1" "$2")     || quit_pb_option ; shift 2;;
     --in_seq_lr_file)         IN_SEQ_LR_FILE=$(get_in_file_param "$1" "$2")  || quit_pb_option ; HAS_SEQ_LR=1; SEQ_LR_OPT="-seq_lr $IN_SEQ_LR_FILE"; shift 2;;
     --MACSE_min_MEM_length)   min_MEM=$(get_in_int_param "$1" "$2")          || quit_pb_option ; MIN_MEM_OPT=" -min_MEM_length $min_MEM"; shift 2;;
@@ -110,7 +116,7 @@ while (( $# > 0 )); do
                               fi
                               ;;
     --aligner_extra_option)   ALIGNER_EXTRA_OPTION="$2"                      || quit_pb_option ; shift 2;;
-    *) echo -e "Option $1 is unknown please ckeck your command line"; quit_pb_option;;
+    *) echo -e "ERROR: Option $1 is unknown. Please check your command line"; quit_pb_option;;
   esac
 done
 
