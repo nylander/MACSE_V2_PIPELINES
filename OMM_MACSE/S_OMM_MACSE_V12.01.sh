@@ -18,7 +18,7 @@ cat <<HEREDOC
 
 OMM_MACSE usage example:
 
-  $SCRIPT_NAME \
+  $SCRIPT_NAME
     --in_seq_file seq_file.fasta
     --out_dir out_dir
     --out_file_prefix PREFIX
