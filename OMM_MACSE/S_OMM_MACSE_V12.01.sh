@@ -15,27 +15,28 @@ printf "\n\n" # separate script message from the rest
 
 function show_help () {
 cat <<HEREDOC
-Usage example:
+
+OMM_MACSE usage example:
 
   $SCRIPT_NAME \
-    --in_seq_file seq_file.fasta \
-    --out_dir out_dir \
-    --out_file_prefix PREFIX \
-    [--genetic_code_number code_number] \
-    [--alignAA_soft [MAFFT/MUSCLE/PRANK]] \
-    [--aligner_extra_option \"--localpair --maxiterate 1000\"] \
-    [--min_percent_NT_at_ends 0.7] \
-    [--out_detail_dir SAVE_DETAILS/] \
-    [--in_seq_lr_file less_reliable_seq_file.fasta] \
-    [--java_mem 500m] \
-    [--MACSE_min_MEM_length 6] \
-    [--no_prefiltering] \
-    [--no_FS_detection] \
-    [--no_filtering] \
-    [--no_postfiltering] \
-    [--min_seqToKeepSite] \
-    [--replace_FS_by_gaps] \
-    [--save_details] \
+    --in_seq_file seq_file.fasta
+    --out_dir out_dir
+    --out_file_prefix PREFIX
+    [--genetic_code_number code_number]
+    [--alignAA_soft [MAFFT/MUSCLE/PRANK]]
+    [--aligner_extra_option \"--localpair --maxiterate 1000\"]
+    [--min_percent_NT_at_ends 0.7]
+    [--out_detail_dir SAVE_DETAILS/]
+    [--in_seq_lr_file less_reliable_seq_file.fasta]
+    [--java_mem 500m]
+    [--MACSE_min_MEM_length 6]
+    [--no_prefiltering]
+    [--no_FS_detection]
+    [--no_filtering]
+    [--no_postfiltering]
+    [--min_seqToKeepSite]
+    [--replace_FS_by_gaps]
+    [--save_details]
     [--debug]
 
 For further details please check the documentation on MACSE website:
