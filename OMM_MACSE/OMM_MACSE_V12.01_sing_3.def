@@ -1,6 +1,3 @@
-# https://apptainer.org/docs/user/latest/endpoint.html#no-default-remote
-# https://github.blog/2023-01-20-sunsetting-subversion-support/
-
 Bootstrap: docker
 From: ubuntu:16.04
 
@@ -61,37 +58,24 @@ HMMCleaner V1_8_VR2 (default)
         mafft=7.271-1 \
         libc6
 
-    ## neened to install subversion
-    #apt-get -y install software-properties-common
-    #add-apt-repository universe
-    #apt-get -y update
-    #apt-get -y install subversion
-    ## end of subversion dependencies
-
     ## install prank
-    #apt-get install libc6
     wget http://wasabiapp.org/download/prank/prank.linux64.170427.tgz
     tar -zxvf prank.linux64.170427.tgz
-    ##
 
     rm -rf /var/lib/apt/lists/*
 
     git clone --depth=1 https://github.com/nylander/MACSE_V2_PIPELINES.git
-    #git clone --depth=1 https://github.com/ranwez/MACSE_V2_PIPELINES.git
-    #svn checkout https://github.com/ranwez/MACSE_V2_PIPELINES/trunk/OMM_MACSE
 
     rm -rf /MACSE_V2_PIPELINES/OMM_MACSE/V*_FREEZED
     rm -rf /MACSE_V2_PIPELINES/UTILS/macse_v2.03.jar
     rm -rf /MACSE_V2_PIPELINES/UTILS/macse_v2.05.jar
     rm -rf /MACSE_V2_PIPELINES/UTILS/macse_v2.07.jar
 
-    #svn checkout https://github.com/ranwez/MACSE_V2_PIPELINES/trunk/UTILS
-
     chmod 755 /MACSE_V2_PIPELINES/OMM_MACSE/*.sh
     chmod -R 755 /prank
     chmod -R 755 /MACSE_V2_PIPELINES/UTILS/LGS_Fasta/*.sh
 
-    # Folders neeeded for the cirad Cluster
+    # Folders needed for the cirad Cluster
     mkdir /work
     mkdir /homedir
     mkdir /projects
@@ -117,6 +101,3 @@ HMMCleaner V1_8_VR2 (default)
 %labels
     Author Vincent Ranwez
 
-#sudo singularity  build OMM_MACSE_V10.01.sif OMM_MACSE_V12.01_sing.def
-#singularity run OMM_MACSE_V12.01.sif
-#singularity run-help OMM_MACSE_V12.01.sif
